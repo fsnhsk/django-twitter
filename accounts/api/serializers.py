@@ -5,7 +5,7 @@ from rest_framework import serializers, exceptions
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'email')
+        fields = ('username', 'email')
 
 
 class SignupSerializer(serializers.ModelSerializer):
@@ -15,7 +15,7 @@ class SignupSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password',)
+        fields = ('username', 'email', 'password')
 
     def validate(self, data):
         # TODO<HOMEWORK> 增加验证 username 是不是只由给定的字符集合构成

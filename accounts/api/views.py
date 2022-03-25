@@ -18,7 +18,7 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
     API endpoint that allows users to be viewed or edited.
     """
     queryset = User.objects.all().order_by('-date_joined')
-    serializer_class = LoginSerializer
+    serializer_class = UserSerializer
     permission_classes = (permissions.IsAuthenticated,)
 
 
@@ -94,8 +94,7 @@ class AccountViewSet(viewsets.ViewSet):
         """
         查看用户当前的登录状态和具体信息
         """
-        data = {'has_logged_in': request.user.is_authenticated,
-                "ip":request.META['REMOTE_ADDR'],}
+        data = {'has_logged_in': request.user.is_authenticated}
         if request.user.is_authenticated:
             data['user'] = UserSerializer(request.user).data
         return Response(data)
