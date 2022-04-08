@@ -18,7 +18,6 @@ class FriendshipViewSet(viewsets.GenericViewSet):
     # 因为 detail=True 的 actions 会默认先去调用 get_object() 也就是
     # queryset.filter(pk=1) 查询一下这个 object 在不在
     queryset = User.objects.all()
-    serializer_class = FriendshipSerializerForCreate
 
     @action(methods=['GET'], detail=True, permission_classes=[AllowAny])
     def followers(self, request, pk):
@@ -61,8 +60,8 @@ class FriendshipViewSet(viewsets.GenericViewSet):
 
     @action(methods=['POST'], detail=True, permission_classes=[IsAuthenticated])
     def unfollow(self, request, pk):
-        unfollow_user = self.get_object()
-        if request.user.id == unfollow_user:
+        # 注意 pk 的类型是 str，所以要做类型转换
+        if request.user.id == int(pk):
             return Response({
                 'success': False,
                 'message': 'You cannot unfollow yourself',
@@ -76,9 +75,6 @@ class FriendshipViewSet(viewsets.GenericViewSet):
         # 取而代之，这样至少可以避免误删除操作带来的多米诺效应。
         deleted, _ = Friendship.objects.filter(
             from_user=request.user,
-            to_user=unfollow_user,
+            to_user=pk,
         ).delete()
         return Response({'success': True, 'deleted': deleted})
-
-    def list(self, request):
-        return Response({'message':'this is friendship home page'})
