@@ -5,7 +5,8 @@ from tweets.models import Tweet
 
 class Comment(models.Model):
     """
-    initial comments models design. Could only comments on tweet, but not on other comments.
+    这个版本中，我们先实现一个比较简单的评论
+    评论只评论在某个Tweet上，不能评论别人的评论
     """
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     tweet = models.ForeignKey(Tweet, null=True, on_delete=models.SET_NULL)
