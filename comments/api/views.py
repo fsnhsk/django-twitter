@@ -5,6 +5,7 @@ from comments.api.serializers import (
     CommentSerializerForUpdate,
 )
 from comments.models import Comment
+from inbox.services import NotificationService
 from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
@@ -49,8 +50,7 @@ class CommentViewSet(viewsets.GenericViewSet):
             'tweet_id': request.data.get('tweet_id'),
             'content': request.data.get('content'),
         }
-        # 注意这里必须要加 'data=' 来指定参数是传给 data 的
-        # 因为默认的第一个参数是 instance
+
         serializer = CommentSerializerForCreate(data=data)
         if not serializer.is_valid():
             return Response({
@@ -60,14 +60,14 @@ class CommentViewSet(viewsets.GenericViewSet):
 
         # save 方法会触发 serializer 里的 create 方法，点进 save 的具体实现里可以看到
         comment = serializer.save()
+        NotificationService.send_comment_notification(comment)
         return Response(
             CommentSerializer(comment, context={'request': request}).data,
             status=status.HTTP_201_CREATED,
         )
 
     def update(self, request, *args, **kwargs):
-        # get_object 是 DRF 包装的一个函数，会在找不到的时候 raise 404 error
-        # 所以这里无需做额外判断
+
         serializer = CommentSerializerForUpdate(
             instance=self.get_object(),
             data=request.data,
