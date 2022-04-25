@@ -3,9 +3,7 @@ from notifications.models import Notification
 
 
 class NotificationSerializer(serializers.ModelSerializer):
-    # 3 types of generic foreign key
-    # user1 liked your tweet1
-    # actor = user1, target=tweet1, verb=liked
+
     class Meta:
         model = Notification
         fields = (
