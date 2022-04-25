@@ -50,7 +50,8 @@ class CommentViewSet(viewsets.GenericViewSet):
             'tweet_id': request.data.get('tweet_id'),
             'content': request.data.get('content'),
         }
-
+        # 注意这里必须要加 'data=' 来指定参数是传给 data 的
+        # 因为默认的第一个参数是 instance
         serializer = CommentSerializerForCreate(data=data)
         if not serializer.is_valid():
             return Response({
@@ -67,7 +68,8 @@ class CommentViewSet(viewsets.GenericViewSet):
         )
 
     def update(self, request, *args, **kwargs):
-
+        # get_object 是 DRF 包装的一个函数，会在找不到的时候 raise 404 error
+        # 所以这里无需做额外判断
         serializer = CommentSerializerForUpdate(
             instance=self.get_object(),
             data=request.data,
