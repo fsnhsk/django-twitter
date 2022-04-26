@@ -19,9 +19,9 @@ class UserProfile(models.Model):
 
 
 # 定义一个 profile 的 property 方法，植入到 User 这个 model 里
-# 通过 user 的一个实例化对象访问 profile 的时候，即 user_instance.profile
+# 这样当我们通过 user 的一个实例化对象访问 profile 的时候，即 user_instance.profile
 # 就会在 UserProfile 中进行 get_or_create 来获得对应的 profile 的 object
-# 这种写法实际上是一个利用 Python 的灵活性进行 hack 的方法，这样会方便user 快速
+# 这种写法实际上是一个利用 Python 的灵活性进行 hack 的方法，这样会方便我们通过 user 快速
 # 访问到对应的 profile 信息。
 def get_profile(user):
     if hasattr(user, '_cached_user_profile'):
