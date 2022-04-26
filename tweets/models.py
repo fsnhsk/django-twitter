@@ -3,6 +3,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from likes.models import Like
 from utils.time_helpers import utc_now
+from tweets.constants import TweetPhotoStatus, TWEET_PHOTO_STATUS_CHOICES
+
 
 class Tweet(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
@@ -28,3 +30,39 @@ class Tweet(models.Model):
             content_type=ContentType.objects.get_for_model(Tweet),
             object_id=self.id,
         ).order_by('-created_at')
+
+
+class TweetPhoto(models.Model):
+    # 图片在哪个 Tweet 下面
+    tweet = models.ForeignKey(Tweet, on_delete=models.SET_NULL, null=True)
+
+
+    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+
+
+    file = models.FileField()
+    order = models.IntegerField(default=0)
+
+
+    status = models.IntegerField(
+        default=TweetPhotoStatus.PENDING,
+        choices=TWEET_PHOTO_STATUS_CHOICES,
+    )
+
+    # 软删除(soft delete)标记，当一个照片被删除的时候，首先会被标记为已经被删除，在一定时间之后
+    # 才会被真正的删除。这样做的目的是，如果在 tweet 被删除的时候马上执行真删除的通常会花费一定的
+    # 时间，影响效率。可以用异步任务在后台慢慢做真删除。
+    has_deleted = models.BooleanField(default=False)
+    deleted_at = models.DateTimeField(null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        index_together = (
+            ('user', 'created_at'),
+            ('has_deleted', 'created_at'),
+            ('status', 'created_at'),
+            ('tweet', 'order'),
+        )
+
+    def __str__(self):
+        return f'{self.tweet_id}: {self.file}'
