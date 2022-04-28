@@ -1,6 +1,7 @@
 from tweets.models import TweetPhoto
 
 
+
 class TweetService(object):
 
     @classmethod
