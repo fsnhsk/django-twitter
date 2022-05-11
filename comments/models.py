@@ -36,6 +36,14 @@ class Comment(models.Model):
             content_type=ContentType.objects.get_for_model(Comment),
             object_id=self.id,
         ).order_by('-created_at')
+    # @property
+    # def like_set(self):
+    #     return Like.objects.filter(
+    #         content_type=ContentType.objects.get_for_model(Comment),
+    #         object_id=self.id,
+    #
+    #
+    #     ).order_by('-created_at')
 
     @property
     def cached_user(self):
