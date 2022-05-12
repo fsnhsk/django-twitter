@@ -80,5 +80,4 @@ class TweetPhoto(models.Model):
 
 
 post_save.connect(invalidate_object_cache, sender=Tweet)
-
 post_save.connect(push_tweet_to_cache, sender=Tweet)

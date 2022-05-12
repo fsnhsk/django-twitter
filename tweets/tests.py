@@ -9,7 +9,6 @@ from utils.redis_serializers import DjangoModelSerializer
 from utils.time_helpers import utc_now
 
 
-
 class TweetTests(TestCase):
 
     def setUp(self):
