@@ -60,9 +60,6 @@ class RedisHelper:
         conn = RedisClient.get_connection()
         key = cls.get_count_key(obj, attr)
         if not conn.exists(key):
-            # getattr--obj.likes_count,
-            # not  +1 operation. before incr_count, obj.attr + 1 already implemented.
-            obj.refresh_from_db()
             conn.set(key, getattr(obj, attr))
             conn.expire(key, settings.REDIS_KEY_EXPIRE_TIME)
             return getattr(obj, attr)
@@ -73,7 +70,6 @@ class RedisHelper:
         conn = RedisClient.get_connection()
         key = cls.get_count_key(obj, attr)
         if not conn.exists(key):
-            obj.refresh_from_db()
             conn.set(key, getattr(obj, attr))
             conn.expire(key, settings.REDIS_KEY_EXPIRE_TIME)
             return getattr(obj, attr)
@@ -91,5 +87,3 @@ class RedisHelper:
         count = getattr(obj, attr)
         conn.set(key, count)
         return count
-
-
