@@ -26,10 +26,7 @@ else
   echo "pip3 已安装"
 fi
 
-# 升级pip，目前存在问题，read timed out，看脸，有时候可以，但大多时候不行
-# python -m pip install --upgrade pip
-# 换源完美解决
-# 安装pip所需依赖
+
 pip install --upgrade setuptools -i https://pypi.tuna.tsinghua.edu.cn/simple
 pip install --ignore-installed wrapt -i https://pypi.tuna.tsinghua.edu.cn/simple
 # 安装pip最新版
@@ -46,13 +43,9 @@ sudo mysql -u root << EOF
 	show databases;
 	CREATE DATABASE IF NOT EXISTS twitter;
 EOF
-# fi
 
-# superuser名字
 USER="admin"
-# superuser密码
 PASS="admin"
-# superuser邮箱
 MAIL="admin@twitter.com"
 script="
 from django.contrib.auth.models import User;
@@ -68,13 +61,4 @@ else:
     print('Superuser creation skipped.');
 "
 printf "$script" | python manage.py shell
-
-
-# 如果想直接进入/vagrant路径下
-# 请输入vagrant ssh命令进入
-# 手动输入
-# 输入ls -a
-# 输入 vi .bashrc
-# 在最下面，添加cd /vagrant
-
 echo 'All Done!'
