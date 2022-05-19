@@ -2,6 +2,7 @@ from django_hbase.models import HBaseField, IntegerField, TimestampField
 from django_hbase.client import HBaseClient
 
 
+
 class BadRowKeyError(Exception):
     pass
 
@@ -148,6 +149,12 @@ class HBaseModel:
         row = table.row(row_key)
         return cls.init_from_row(row_key, row)
 
+#HbaseModel.create(from_user_id=1, to_user_id=2, created_at=ts)
+#instance = HBaseModel(from_user_id=1, to_user_id=2, created_at=ts)
+#instance.save()
+#instance.from_user_id=2
+#instance.save()
+#written as cls(**kwargs).   if cls(kwargs), only takes first parameter.
     @classmethod
     def create(cls, **kwargs):
         instance = cls(**kwargs)

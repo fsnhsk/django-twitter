@@ -1,4 +1,4 @@
-class HbaseField:
+class HBaseField:
     field_type = None
 
     # optional.
@@ -7,14 +7,14 @@ class HbaseField:
         self.column_family = column_family
 
 
-class IntegerField(HbaseField):
+class IntegerField(HBaseField):
     field_type = 'int'
     #optional.
     def __init__(self, *args, auto_now_add=False, **kwargs):
         super(IntegerField, self).__init__( *args, **kwargs)
 
 
-class TimestampField(HbaseField):
+class TimestampField(HBaseField):
     field_type = 'timestamp'
     #optional.
     def __init__(self, *args, auto_now_add=False, **kwargs):
